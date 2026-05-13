@@ -1,15 +1,26 @@
-import zh from "./locale/zh";
+import { moment } from 'obsidian';
+
+import zhCN from './locale/zh-cn';
 import en from "./locale/en";
 
-const localeMap: { [k: string]: Partial<typeof en>; } = {
-    en,
-    zh,
+
+
+
+const localeMap: { [k: string]: Partial<typeof en> } = {
+  en,
+  'zh-cn': zhCN,
 };
 
+const locale = localeMap[moment.locale()];
 
-const lang = window.localStorage.getItem("language");
-const locale = localeMap[lang || "en"];
+export function t(str: keyof typeof en | string): string {
+  if (typeof str !== 'string' || str.length === 0) {
+    return '';
+  }
 
-export function t(text: keyof typeof en): string {
-    return (locale && locale[text]) || en[text];
+  return (
+    (locale && locale[str as keyof typeof en]) ||
+    en[str as keyof typeof en] ||
+    str
+  );
 }

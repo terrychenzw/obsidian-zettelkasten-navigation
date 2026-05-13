@@ -680,10 +680,8 @@ export class ZKIndexView extends ItemView {
             
             for(let i = 0; i < branchEntranceNodeArr.length; i++){
 
-                let branchTab = indexLinkDiv.createEl('span').createEl('a', { text: `🌿${i+1} `,cls:"zk-branch-tab"});
-                
                 let node = branchEntranceNodeArr[i];
-                setTooltip(branchTab,`${node.displayText} (${this.plugin.MainNotes.filter(n=>n.IDStr.startsWith(node.IDStr)).length})`)
+                let branchTab = indexLinkDiv.createEl('span').createEl('a', { text: `🌿${node.ID} (${this.plugin.MainNotes.filter(n=>n.IDStr.startsWith(node.IDStr)).length}) `,cls:"zk-branch-tab"});
                 
                 branchTab.addEventListener("click", async () => {                        
                     await this.openBranchTab(i);
