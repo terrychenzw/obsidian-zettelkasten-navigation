@@ -132,7 +132,7 @@ padding: 5px;
   margin: -2px;
 }
 
-.top-buttons-div button:hover{
+.zk-navigation-item-selected, .top-buttons-div button:hover{
   background-color: var(--interactive-accent) !important;
 }
 

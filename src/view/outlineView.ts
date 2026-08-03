@@ -1,6 +1,6 @@
-import ZKNavigationPlugin from "main";
-import { debounce, ExtraButtonComponent, IconName, ItemView, Menu, Notice, SliderComponent, WorkspaceLeaf } from "obsidian"
-import { t } from "src/lang/helper"
+import ZKNavigationPlugin from "@/main";
+import { App, debounce, ExtraButtonComponent, IconName, ItemView, Menu, Notice, SliderComponent, WorkspaceLeaf } from "obsidian"
+import { t } from "@/src/lang/helper"
 import { ZK_NAVIGATION, ZKNode } from "./indexView";
 
 export const ZK_OUTLINE_TYPE: string = "zk-outline-type"
@@ -11,11 +11,12 @@ export class ZKOutlineView extends ItemView {
     plugin:ZKNavigationPlugin;
     maxLength:number = 0;
     minLength:number = 0;
-    defautLength:number
+    defautLength:number = 0;
 
-    constructor(leaf: WorkspaceLeaf, plugin: ZKNavigationPlugin) {
+    constructor(app:App, leaf: WorkspaceLeaf, plugin: ZKNavigationPlugin) {
         super(leaf);
         this.plugin = plugin;
+        this.app = app;
     }
 
     getViewType(): string {

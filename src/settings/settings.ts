@@ -1,12 +1,12 @@
-import ZKNavigationPlugin, { NodeCommand } from "main";
-import { App, ButtonComponent, ExtraButtonComponent, Notice, PluginSettingTab, setIcon, Setting } from "obsidian";
-import { FolderSuggest } from "../suggester/FolderSuggester";
-import { TagSuggest } from "src/suggester/TagSuggester";
-import { t } from "../lang/helper";
-import { FileSuggest } from "src/suggester/FileSuggester";
-import { addCommandModal } from "src/modal/addCommandModal";
-import ChooseIconModal from "src/modal/chooseIconModal";
-import chooseCustomNameModal from "src/modal/chooseCustomNameModal";
+import ZKNavigationPlugin, { NodeCommand } from "@/main";
+import { App, ButtonComponent, ExtraButtonComponent, PluginSettingTab, setIcon, Setting } from "obsidian";
+import { FolderSuggest } from "@/src/suggester/FolderSuggester";
+import { TagSuggest } from "@/src/suggester/TagSuggester";
+import { t } from "@/src/lang/helper";
+import { FileSuggest } from "@/src/suggester/FileSuggester";
+import { addCommandModal } from "@/src/modal/addCommandModal";
+import ChooseIconModal from "@/src/modal/chooseIconModal";
+import chooseCustomNameModal from "@/src/modal/chooseCustomNameModal";
 
 export class ZKNavigationSettngTab extends PluginSettingTab {
 
@@ -32,35 +32,35 @@ export class ZKNavigationSettngTab extends PluginSettingTab {
         mainNoteButton.setButtonText(t("ZK main notes"))
         .setClass("vertical-tab-nav-item")
         .onClick(()=>{
-            this.openTabSection(0,topButtonsDiv);          
+            this.openTabSection(0,topButtonsDiv, settingTabDiv);          
         })
 
         const retrievalButton = new ButtonComponent(topButtonsDiv);
         retrievalButton.setButtonText(t("Retrieval"))
         .setClass("vertical-tab-nav-item")
         .onClick(()=>{
-            this.openTabSection(1,topButtonsDiv);
+            this.openTabSection(1,topButtonsDiv, settingTabDiv);
         })
 
         const indexGraphButton = new ButtonComponent(topButtonsDiv);
         indexGraphButton.setButtonText(t("zk-index-graph-view"))
         .setClass("vertical-tab-nav-item")
         .onClick(()=>{
-            this.openTabSection(2,topButtonsDiv);
+            this.openTabSection(2,topButtonsDiv,settingTabDiv);
         })
 
         const localGraphButton = new ButtonComponent(topButtonsDiv);
         localGraphButton.setButtonText(t("zk-local-graph-view"))
         .setClass("vertical-tab-nav-item")
         .onClick(()=>{
-            this.openTabSection(3,topButtonsDiv); 
+            this.openTabSection(3,topButtonsDiv,settingTabDiv); 
         })
 
         const experimentalButton = new ButtonComponent(topButtonsDiv);
         experimentalButton.setButtonText(t("experimental"))
         .setClass("vertical-tab-nav-item")
         .onClick(()=>{
-            this.openTabSection(4,topButtonsDiv); 
+            this.openTabSection(4,topButtonsDiv,settingTabDiv); 
         })
 
         const mainNotesDiv = settingTabDiv.createDiv("zk-setting-section");
@@ -743,27 +743,28 @@ export class ZKNavigationSettngTab extends PluginSettingTab {
         );
 
         
-        this.initDiv(topButtonsDiv);
+        this.initDiv(topButtonsDiv, settingTabDiv);
 
     }
 
-    openTabSection(selectNo:number, topButtonsDiv: HTMLDivElement){
-        const sections = document.getElementsByClassName("zk-setting-section");
+    openTabSection(selectNo:number, topButtonsDiv: HTMLDivElement, settingTabDiv: HTMLDivElement){
+        const sections = settingTabDiv.getElementsByClassName("zk-setting-section");
+
         const buttons = topButtonsDiv.querySelectorAll('button');
 
         for(let i=0; i<sections.length;i++){
             sections[i].addClass("zk-hidden")
-
-            buttons[i].removeClass("is-active"); 
+            
+            buttons[i].removeClass("zk-navigation-item-selected"); 
         }
 
         sections[selectNo].removeClass("zk-hidden")
-        buttons[selectNo].addClass("is-active");
+        buttons[selectNo].addClass("zk-navigation-item-selected");
         this.plugin.settings.SectionTab = selectNo;
     }
 
-    initDiv(topButtonsDiv: HTMLDivElement){
-        this.openTabSection(this.plugin.settings.SectionTab,topButtonsDiv);
+    initDiv(topButtonsDiv: HTMLDivElement, settingTabDiv:HTMLDivElement){
+        this.openTabSection(this.plugin.settings.SectionTab,topButtonsDiv, settingTabDiv);
     }
 
     hideDiv(div:HTMLDivElement){

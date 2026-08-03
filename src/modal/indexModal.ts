@@ -1,7 +1,7 @@
-import ZKNavigationPlugin from "main";
+import ZKNavigationPlugin from "@/main";
 import { App, FuzzySuggestModal, Notice, SuggestModal, renderMatches } from "obsidian";
-import { t } from "src/lang/helper";
-import { ZKNode } from "src/view/indexView";
+import { t } from "@/src//lang/helper";
+import { ZKNode } from "@/src//view/indexView";
 
 export interface ZKIndex {
   keyword: string,
@@ -10,11 +10,16 @@ export interface ZKIndex {
 }
 
 export class indexModal extends SuggestModal<ZKIndex> {
-  index: ZKIndex;
+  index: ZKIndex = {
+    keyword: "",
+    display: "",
+    path: "",
+  };
+
   onSubmit: (index: ZKIndex) => void;
-  ALL_ZKIndex: ZKIndex[];
+  ALL_ZKIndex: ZKIndex[] =[];
   plugin: ZKNavigationPlugin;
-  query: string
+  query: string = '';
   MainNotes: ZKNode[];
 
   constructor(app: App, plugin: ZKNavigationPlugin, MainNotes: ZKNode[], onSubmit: (index: ZKIndex) => void) {
@@ -96,11 +101,15 @@ export class indexModal extends SuggestModal<ZKIndex> {
 
 export class indexFuzzyModal extends FuzzySuggestModal<ZKIndex> {
 
-  index: ZKIndex;
+  index: ZKIndex = {
+    keyword: "",
+    display: "",
+    path: "",
+  };
   onSubmit: (index: ZKIndex) => void;
-  ALL_ZKIndex: ZKIndex[];
+  ALL_ZKIndex: ZKIndex[] = [];
   plugin: ZKNavigationPlugin;
-  MainNotes: ZKNode[];
+  MainNotes: ZKNode[] = [];
 
   constructor(app: App, plugin: ZKNavigationPlugin, MainNotes: ZKNode[], onSubmit: (index: ZKIndex) => void) {
     super(app);

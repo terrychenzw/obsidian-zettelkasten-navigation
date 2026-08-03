@@ -1,8 +1,8 @@
 // copy from obsidian-commander plugin: https://github.com/phibr0/obsidian-commander
 
-import ZKNavigationPlugin from "main";
+import ZKNavigationPlugin from "@/main";
 import { setIcon, FuzzySuggestModal, FuzzyMatch, App, getIconIds } from "obsidian";
-import { t } from "src/lang/helper";
+import { t } from "@/src//lang/helper";
 
 export default class ChooseIconModal extends FuzzySuggestModal<string> {
 

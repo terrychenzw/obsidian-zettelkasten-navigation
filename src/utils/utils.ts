@@ -1,6 +1,6 @@
-import ZKNavigationPlugin, { ZoomPanScale } from "main";
-import { loadMermaid, moment, Notice, TFile } from "obsidian";
-import { ZKNode } from "src/view/indexView";
+import ZKNavigationPlugin, { ZoomPanScale } from "@/main";
+import { App, loadMermaid, moment, Notice, TFile } from "obsidian";
+import { ZKNode } from "@/src/view/indexView";
 
 // formatting Luhmann style IDs
 export async function ID_formatting(id: string, arr: string[], siblingsOrder:string): Promise<string[]> {
@@ -40,9 +40,9 @@ export async function ID_formatting(id: string, arr: string[], siblingsOrder:str
 }
 
 // translating different ID fields(filename/attribute/prefix of filename) into standard ZKNode array
-export async function mainNoteInit(plugin:ZKNavigationPlugin){
+export async function mainNoteInit(app:App, plugin:ZKNavigationPlugin){
 
-    let mainNoteFiles:TFile[] = this.app.vault.getFiles();
+    let mainNoteFiles:TFile[] = app.vault.getFiles();
 
     if(plugin.settings.MainNoteExt == 'md'){
         mainNoteFiles = mainNoteFiles.filter(file=>file.extension == "md");
@@ -85,7 +85,7 @@ export async function mainNoteInit(plugin:ZKNavigationPlugin){
         }
         
         mdMainNote = mainNoteFiles.filter(
-            file => file.extension == 'md' && getfileTags(file).includes(plugin.settings.TagOfMainNotes)
+            file => file.extension == 'md' && getfileTags(app, file).includes(plugin.settings.TagOfMainNotes)
         )
         mainNoteFiles = mdMainNote.concat(otherMainNote);
     }
@@ -114,7 +114,7 @@ export async function mainNoteInit(plugin:ZKNavigationPlugin){
             gitNodePos: 0,
         }
 
-        let nodeCache = this.app.metadataCache.getFileCache(note);
+        let nodeCache = app.metadataCache.getFileCache(note);
 
         switch (plugin.settings.IDFieldOption) {
             case "1":
@@ -212,7 +212,7 @@ export async function mainNoteInit(plugin:ZKNavigationPlugin){
         for (let i = 0; i < plugin.MainNotes.length; i++) {
             let node = plugin.MainNotes[i];
             if(node.file.extension == 'md'){
-                let fm = await this.app.metadataCache.getFileCache(node.file).frontmatter;
+                let fm = app.metadataCache.getFileCache(node.file)?.frontmatter;
                 if(fm){
                     let IDs = fm[plugin.settings.multiIDField];
                     if(Array.isArray(IDs)){
@@ -417,9 +417,9 @@ export async function addSvgPanZoom(
     }  
 }
 
-function getfileTags(file:TFile){
+function getfileTags(app:App, file:TFile){
     let fileTags:string[] = [];
-    let fmTags = this.app.metadataCache.getFileCache(file)?.frontmatter?.tags;
+    let fmTags = app.metadataCache.getFileCache(file)?.frontmatter?.tags;
     	if(fmTags){
 		if(Array.isArray(fmTags)){
 		
@@ -433,7 +433,7 @@ function getfileTags(file:TFile){
 		}
 	}
 
-    let tags = this.app.metadataCache.getFileCache(file)?.tags
+    let tags = app.metadataCache.getFileCache(file)?.tags
 	
 	if(tags && Array.isArray(tags)){
 

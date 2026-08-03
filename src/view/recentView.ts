@@ -1,6 +1,6 @@
-import ZKNavigationPlugin from "main";
-import { debounce,  ExtraButtonComponent,  IconName, ItemView, moment, Notice, WorkspaceLeaf } from "obsidian"
-import { t } from "src/lang/helper"
+import ZKNavigationPlugin from "@/main";
+import { App, debounce,  ExtraButtonComponent,  IconName, ItemView, moment, Notice, WorkspaceLeaf } from "obsidian"
+import { t } from "@/src/lang/helper"
 import { ZK_NAVIGATION } from "./indexView";
 
 export const ZK_RECENT_TYPE: string = "zk-recent-type"
@@ -8,10 +8,12 @@ export const ZK_RECENT_VIEW: string = t("History List")
 
 export class ZKRecentView extends ItemView {
     plugin:ZKNavigationPlugin;
+    app:App;
 
-    constructor(leaf: WorkspaceLeaf, plugin: ZKNavigationPlugin) {
+    constructor(app:App, leaf: WorkspaceLeaf, plugin: ZKNavigationPlugin) {
         super(leaf);
         this.plugin = plugin;
+        this.app = app;
     }
 
     getViewType(): string {

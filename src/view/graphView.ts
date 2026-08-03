@@ -1,9 +1,9 @@
-import ZKNavigationPlugin from "main";
-import { ExtraButtonComponent, FileView, ItemView, Notice, TFile, WorkspaceLeaf, debounce, loadMermaid } from "obsidian";
+import ZKNavigationPlugin from "@/main";
+import { App, ExtraButtonComponent, FileView, ItemView, Notice, TFile, WorkspaceLeaf, debounce, loadMermaid } from "obsidian";
 import { GitBranch, ZKNode, ZK_NAVIGATION } from "./indexView";
-import { t } from "src/lang/helper";
-import { displayWidth, mainNoteInit } from "src/utils/utils";
-import { expandGraphModal } from "src/modal/expandGraphModal";
+import { t } from "@/src/lang/helper";
+import { displayWidth, mainNoteInit } from "@/src/utils/utils";
+import { expandGraphModal } from "@/src/modal/expandGraphModal";
 
 export const ZK_GRAPH_TYPE: string = "zk-graph-type"
 export const ZK_GRAPH_VIEW: string = t("zk-local-graph")
@@ -11,17 +11,20 @@ export const ZK_GRAPH_VIEW: string = t("zk-local-graph")
 export class ZKGraphView extends ItemView {
 
     plugin: ZKNavigationPlugin;
-    currentFile: TFile | null;
+    currentFile: TFile | null = null;
     familyNodeArr: ZKNode[] = [];
     graphHeight:number = 0;
     countOfGraphs:number = 0;
     gitBranches: GitBranch[] = [];
-    order: number;
-    result: GitBranch[];
+    order: number = 0;
+    result: GitBranch[] =[];
+    app:App;
 
-    constructor(leaf: WorkspaceLeaf, plugin: ZKNavigationPlugin) {
+
+    constructor(app:App, leaf: WorkspaceLeaf, plugin: ZKNavigationPlugin) {
         super(leaf);
         this.plugin = plugin;
+        this.app =  app;
     }
 
     getViewType(): string {
@@ -94,7 +97,8 @@ export class ZKGraphView extends ItemView {
         this.graphHeight = Math.floor(containerEl.offsetHeight / this.countOfGraphs - 10);
 
         const graphMermaidDiv = containerEl.createDiv().createDiv("zk-graph-mermaid-container");
-        await mainNoteInit(this.plugin);
+
+        await mainNoteInit(this.app, this.plugin);
 
         switch (this.plugin.retrivalforLocaLgraph.type) {
             case '1': //click graph
@@ -196,7 +200,9 @@ export class ZKGraphView extends ItemView {
                             link.textContent = nodeArr[i].getText();
                             nodeArr[i].textContent = "";
                             nodeArr[i].appendChild(link);
-                            nodeGArr[i].addEventListener("click", (event: MouseEvent) => {
+                            const element = nodeGArr[i] as HTMLElement;
+
+                            element.addEventListener("click", (event: MouseEvent) => {
                                 if(event.ctrlKey){
                                     this.app.workspace.openLinkText("", node.file.path, 'tab');
                                 }else if(event.shiftKey){
@@ -221,10 +227,10 @@ export class ZKGraphView extends ItemView {
                                     this.app.workspace.openLinkText("",node.file.path)
                                 }
                             })
-                            nodeGArr[i].addEventListener("touchend", () => {
+                            element.addEventListener("touchend", () => {
                                 this.app.workspace.openLinkText("",node.file.path)
                             })
-                            nodeGArr[i].addEventListener(`mouseover`, (event: MouseEvent) => {
+                            element.addEventListener(`mouseover`, (event: MouseEvent) => {
                                 this.app.workspace.trigger(`hover-link`, {
                                     event,
                                     source: ZK_NAVIGATION,
@@ -300,7 +306,8 @@ export class ZKGraphView extends ItemView {
                             let nodeArr = this.familyNodeArr.filter(n=>n.gitNodePos === j);
                             if(nodeArr.length > 0){
                                 let node = nodeArr[0];
-                                circleNodes[j].addEventListener("click", async (event: MouseEvent) => {  
+                                const element = circleNodes[j] as HTMLElement;
+                                element.addEventListener("click", async (event: MouseEvent) => {  
                                     if (event.ctrlKey) {
                                         this.app.workspace.openLinkText("", node.file.path, 'tab');
                                     }else if(event.shiftKey){
@@ -325,7 +332,7 @@ export class ZKGraphView extends ItemView {
                                     }
                                     
                                 })
-                                circleNodes[j].addEventListener(`mouseover`, (event: MouseEvent) => {
+                                element.addEventListener(`mouseover`, (event: MouseEvent) => {
                                     this.app.workspace.trigger(`hover-link`, {
                                         event,
                                         source: ZK_NAVIGATION,
@@ -408,7 +415,8 @@ export class ZKGraphView extends ItemView {
                     link.textContent = nodeArr[i].getText();
                     nodeArr[i].textContent = "";
                     nodeArr[i].appendChild(link);
-                    nodeGArr[i].addEventListener("click", (event: MouseEvent) => {
+                    const element = nodeGArr[i] as HTMLElement;
+                    element.addEventListener("click", (event: MouseEvent) => {
                         if(event.ctrlKey){
                             this.app.workspace.openLinkText("", node.path, 'tab');
                         }else if(event.shiftKey){
@@ -453,11 +461,11 @@ export class ZKGraphView extends ItemView {
                             this.app.workspace.openLinkText("", node.path);
                         }
                     })
-                    nodeGArr[i].addEventListener("touchend", () => {
+                    element.addEventListener("touchend", () => {
                         this.app.workspace.openLinkText("",node.path)
                     })
 
-                    nodeGArr[i].addEventListener(`mouseover`, (event: MouseEvent) => {
+                    element.addEventListener(`mouseover`, (event: MouseEvent) => {
                         this.app.workspace.trigger(`hover-link`, {
                             event,
                             source: ZK_NAVIGATION,
@@ -538,7 +546,8 @@ export class ZKGraphView extends ItemView {
                     link.textContent = nodeArr[i].getText();
                     nodeArr[i].textContent = "";
                     nodeArr[i].appendChild(link);
-                    nodeGArr[i].addEventListener("click", async (event: MouseEvent) => {
+                    const element = nodeGArr[i] as HTMLElement;
+                    element.addEventListener("click", async (event: MouseEvent) => {
                         if(event.ctrlKey){
                             this.app.workspace.openLinkText("", node.path, 'tab');
                         }else if(event.shiftKey){
@@ -585,11 +594,11 @@ export class ZKGraphView extends ItemView {
                         }
                             
                     })
-                    nodeGArr[i].addEventListener("touchend", () => {
+                    element.addEventListener("touchend", () => {
                         this.app.workspace.openLinkText("",node.path)
                     })
 
-                    nodeGArr[i].addEventListener(`mouseover`, (event: MouseEvent) => {
+                    element.addEventListener(`mouseover`, (event: MouseEvent) => {
                         this.app.workspace.trigger(`hover-link`, {
                             event,
                             source: ZK_NAVIGATION,

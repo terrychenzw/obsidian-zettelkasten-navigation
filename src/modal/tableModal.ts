@@ -1,7 +1,7 @@
-import ZKNavigationPlugin from "main";
+import ZKNavigationPlugin from "@/main";
 import { App, ExtraButtonComponent, MarkdownRenderer, Modal, moment, Notice, TFile } from "obsidian";
-import { t } from "src/lang/helper";
-import { ZKNode, ZK_NAVIGATION } from "src/view/indexView";
+import { t } from "@/src//lang/helper";
+import { ZKNode, ZK_NAVIGATION } from "@/src//view/indexView";
 
 export class tableModal extends Modal {
 

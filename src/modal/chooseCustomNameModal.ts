@@ -1,7 +1,7 @@
 // copy from obsidian-commander plugin: https://github.com/phibr0/obsidian-commander
 
 import { App, SuggestModal } from "obsidian";
-import { t } from "src/lang/helper";
+import { t } from "@/src//lang/helper";
 
 export default class chooseCustomNameModal extends SuggestModal<string> {
 	// This is used in onOpen, not sure why eslint doesn't recognize it

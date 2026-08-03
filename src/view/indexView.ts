@@ -1,10 +1,10 @@
-import ZKNavigationPlugin, { FoldNode, Retrival } from "main";
-import { ButtonComponent, DropdownComponent, ExtraButtonComponent, HeadingCache, ItemView, Menu, Notice, TFile, WorkspaceLeaf, debounce, moment, setTooltip } from "obsidian";
-import { t } from "src/lang/helper";
-import { indexFuzzyModal, indexModal } from "src/modal/indexModal";
-import { mainNoteFuzzyModal, mainNoteModal } from "src/modal/mainNoteModal";
-import { tableModal } from "src/modal/tableModal";
-import { addSvgPanZoom, displayWidth, mainNoteInit, random } from "src/utils/utils";
+import ZKNavigationPlugin, { FoldNode, Retrival } from "@/main";
+import { App, ButtonComponent, DropdownComponent, ExtraButtonComponent, HeadingCache, ItemView, Menu, Notice, TFile, WorkspaceLeaf, debounce, moment, setTooltip } from "obsidian";
+import { t } from "@/src/lang/helper";
+import { indexFuzzyModal, indexModal } from "@/src/modal/indexModal";
+import { mainNoteFuzzyModal, mainNoteModal } from "@/src/modal/mainNoteModal";
+import { tableModal } from "@/src/modal/tableModal";
+import { addSvgPanZoom, displayWidth, mainNoteInit, random } from "@/src/utils/utils";
 
 export const ZK_INDEX_TYPE: string = "zk-index-type";
 export const ZK_INDEX_VIEW: string = t("zk-index-graph");
@@ -61,7 +61,8 @@ interface AllGitBranch{
 export class ZKIndexView extends ItemView {
 
     plugin: ZKNavigationPlugin;
-    branchAllNodes: BrancAllhNodes[];
+    branchAllNodes: BrancAllhNodes[] = [];
+    app:App;
 
     playStatus: PlayStates = {
         current:0,
@@ -71,15 +72,16 @@ export class ZKIndexView extends ItemView {
         labels:[]
     };
 
-    gitBranches: GitBranch[];
-    order: number;
-    result: GitBranch[];
-    allGitBranch: AllGitBranch[];
-    fileContent: string;
+    gitBranches: GitBranch[] = [];
+    order: number = 0;
+    result: GitBranch[] = [];
+    allGitBranch: AllGitBranch[] = [];
+    fileContent: string ='';
 
-    constructor(leaf: WorkspaceLeaf, plugin: ZKNavigationPlugin) {
+    constructor(app:App, leaf: WorkspaceLeaf, plugin: ZKNavigationPlugin) {
         super(leaf);
         this.plugin = plugin;
+        this.app = app;
     }
 
     getViewType(): string {
@@ -317,7 +319,7 @@ export class ZKIndexView extends ItemView {
 
         if(!indexMermaidDiv) return;
 
-        await mainNoteInit(this.plugin);
+        await mainNoteInit(this.app, this.plugin);
 
         indexMermaidDiv.empty(); 
 
@@ -727,7 +729,8 @@ export class ZKIndexView extends ItemView {
                         nodeArr[i].textContent = "";
                         nodeArr[i].appendChild(link);
                         
-                        nodeGArr[i].addEventListener('contextmenu', (event: MouseEvent) => {
+                        const element = nodeGArr[i] as HTMLElement
+                        element.addEventListener('contextmenu', (event: MouseEvent) => {
                             
                             const menu = new Menu();
 
@@ -768,14 +771,14 @@ export class ZKIndexView extends ItemView {
                             }
                         }
 
-                        nodeArr[i].addEventListener("click", async (event: MouseEvent) => {
+                        element.addEventListener("click", async (event: MouseEvent) => {
                             if (event.ctrlKey) {
                                 this.app.workspace.openLinkText("", node.file.path, 'tab');
                                 event.stopPropagation();
                             }
                         })                
 
-                        nodeGArr[i].addEventListener("click", async (event: MouseEvent) => {
+                        element.addEventListener("click", async (event: MouseEvent) => {
                             if (event.ctrlKey) {
                                 navigator.clipboard.writeText(node.ID)
                                 new Notice(node.ID + " copied")
@@ -801,11 +804,11 @@ export class ZKIndexView extends ItemView {
                                 this.app.workspace.openLinkText("", node.file.path)
                             }
                         })
-                        nodeGArr[i].addEventListener("touchend", () => { 
+                        element.addEventListener("touchend", () => { 
                             this.app.workspace.openLinkText("", node.file.path)
                         })
 
-                        nodeGArr[i].addEventListener(`mouseover`, (event: MouseEvent) => {
+                        element.addEventListener(`mouseover`, (event: MouseEvent) => {
                             this.app.workspace.trigger(`hover-link`, {
                                 event,
                                 source: ZK_NAVIGATION,
@@ -886,7 +889,8 @@ export class ZKIndexView extends ItemView {
                     let nodeArr = nodes.filter(n=>n.gitNodePos === j);
                     if(nodeArr.length > 0){
                         let node = nodeArr[0];
-                        circleNodes[j].addEventListener("click", async (event: MouseEvent) => {  
+                        const element = circleNodes[j] as HTMLElement
+                        element.addEventListener("click", async (event: MouseEvent) => {  
                             if (event.ctrlKey) {
                                 this.app.workspace.openLinkText("", node.file.path, 'tab');
                             }else if(event.shiftKey){
@@ -912,10 +916,10 @@ export class ZKIndexView extends ItemView {
                             }
                             
                         })
-                        circleNodes[j].addEventListener("touchend", () => { 
+                        element.addEventListener("touchend", () => { 
                             this.app.workspace.openLinkText("", node.file.path)
                         })
-                        circleNodes[j].addEventListener('contextmenu', (event: MouseEvent) => {
+                        element.addEventListener('contextmenu', (event: MouseEvent) => {
                                     
                             const menu = new Menu();
                             for(let command of this.plugin.settings.NodeCommands){
@@ -947,7 +951,7 @@ export class ZKIndexView extends ItemView {
                             }                       
                             menu.showAtMouseEvent(event);
                         });
-                        circleNodes[j].addEventListener(`mouseover`, (event: MouseEvent) => {
+                        element.addEventListener(`mouseover`, (event: MouseEvent) => {
                             this.app.workspace.trigger(`hover-link`, {
                                 event,
                                 source: ZK_NAVIGATION,

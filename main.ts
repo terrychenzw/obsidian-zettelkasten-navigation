@@ -1,14 +1,14 @@
-import { FileView, loadMermaid, moment, Notice, Plugin, TFile} from "obsidian";
-import { t } from "src/lang/helper";
-import { indexFuzzyModal, indexModal } from "src/modal/indexModal";
-import { mainNoteFuzzyModal, mainNoteModal } from "src/modal/mainNoteModal";
-import { ZKNavigationSettngTab } from "src/settings/settings";
-import { mainNoteInit } from "src/utils/utils";
-import { ZKGraphView, ZK_GRAPH_TYPE } from "src/view/graphView";
-import { ZKIndexView, ZKNode, ZK_INDEX_TYPE, ZK_NAVIGATION } from "src/view/indexView";
-import { ZK_OUTLINE_TYPE, ZKOutlineView } from "src/view/outlineView";
-import { ZK_RECENT_TYPE, ZKRecentView } from "src/view/recentView";
-import { ZK_TABLE_TYPE, ZKTableView } from "src/view/tableView";
+import { FileView, moment, Notice, Plugin, TFile} from "obsidian";
+import { t } from "@/src/lang/helper";
+import { indexFuzzyModal, indexModal } from "@/src/modal/indexModal";
+import { mainNoteFuzzyModal, mainNoteModal } from "@/src/modal/mainNoteModal";
+import { ZKNavigationSettngTab } from "@/src/settings/settings";
+import { mainNoteInit } from "@/src/utils/utils";
+import { ZKGraphView, ZK_GRAPH_TYPE } from "@/src/view/graphView";
+import { ZKIndexView, ZKNode, ZK_INDEX_TYPE, ZK_NAVIGATION } from "@/src/view/indexView";
+import { ZK_OUTLINE_TYPE, ZKOutlineView } from "@/src/view/outlineView";
+import { ZK_RECENT_TYPE, ZKRecentView } from "@/src/view/recentView";
+import { ZK_TABLE_TYPE, ZKTableView } from "@/src/view/tableView";
 
 export interface FoldNode{
     graphID: string;
@@ -129,7 +129,7 @@ const DEFAULT_SETTINGS: ZKNavigationSettings = {
     FolderOfIndexes: '',
     MainNoteExt:"md",
     StartingPoint: 'parent',
-    DisplayLevel: 'end',
+    DisplayLevel: 'next',
     NodeText: "both",
     FamilyGraphToggle: true,
     InlinksGraphToggle: true,
@@ -197,7 +197,7 @@ const DEFAULT_SETTINGS: ZKNavigationSettings = {
 
 export default class ZKNavigationPlugin extends Plugin {
 
-    settings: ZKNavigationSettings;
+    settings: ZKNavigationSettings = DEFAULT_SETTINGS;
     MainNotes: ZKNode[] = [];
     tableArr: ZKNode[] = [];
     retrivalforLocaLgraph: LocalRetrival = {
@@ -322,15 +322,15 @@ export default class ZKNavigationPlugin extends Plugin {
 
         this.addSettingTab(new ZKNavigationSettngTab(this.app, this));
 
-        this.registerView(ZK_INDEX_TYPE, (leaf) => new ZKIndexView(leaf, this));
+        this.registerView(ZK_INDEX_TYPE, (leaf) => new ZKIndexView(this.app, leaf, this));
 
-        this.registerView(ZK_GRAPH_TYPE, (leaf) => new ZKGraphView(leaf, this));
+        this.registerView(ZK_GRAPH_TYPE, (leaf) => new ZKGraphView(this.app, leaf, this));
 
-        this.registerView(ZK_OUTLINE_TYPE, (leaf) => new ZKOutlineView(leaf, this));
+        this.registerView(ZK_OUTLINE_TYPE, (leaf) => new ZKOutlineView(this.app, leaf, this));
 
-        this.registerView(ZK_RECENT_TYPE, (leaf) => new ZKRecentView(leaf, this));
+        this.registerView(ZK_RECENT_TYPE, (leaf) => new ZKRecentView(this.app, leaf, this));
 
-        this.registerView(ZK_TABLE_TYPE, (leaf) => new ZKTableView(leaf, this, this.tableArr));
+        this.registerView(ZK_TABLE_TYPE, (leaf) => new ZKTableView(this.app, leaf, this, this.tableArr));
               
         this.addRibbonIcon("ghost", t("open zk-index-graph"), async () => {
             
@@ -577,7 +577,7 @@ export default class ZKNavigationPlugin extends Plugin {
 
             if(!indexFlag){
 
-                await mainNoteInit(this);
+                await mainNoteInit(this.app, this);
                 
                 this.settings.lastRetrival = {
                     type: 'main',

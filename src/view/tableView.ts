@@ -1,7 +1,8 @@
-import ZKNavigationPlugin from "main";
-import { debounce, ItemView, MarkdownRenderer, moment, TFile, WorkspaceLeaf } from "obsidian";
-import { t } from "src/lang/helper";
+import ZKNavigationPlugin from "@/main";
+import { App, debounce, ItemView, MarkdownRenderer, moment, TFile, WorkspaceLeaf } from "obsidian";
 import { ZKNode, ZK_NAVIGATION } from "./indexView";
+
+import{ t } from '@/src/lang/helper';
 
 
 export const ZK_TABLE_TYPE: string = "zk-table-type"
@@ -12,11 +13,13 @@ export class ZKTableView extends ItemView{
     plugin: ZKNavigationPlugin;
     headerStr:string = `|${t("note's ID")}|${t("note's title")}|${t("inlinks")}|${t("outlinks")}|${t("Time of creation")}|\n| --- | --- | --- | --- | --- |\n`;
     tableStr:string = "";
-    tableArr:ZKNode[];
+    tableArr:ZKNode[] = [];
+    app:App;
 
-    constructor(leaf:WorkspaceLeaf, plugin:ZKNavigationPlugin, tableArr:ZKNode[]){
+    constructor(app:App,leaf:WorkspaceLeaf, plugin:ZKNavigationPlugin, tableArr:ZKNode[]){
         super(leaf);
         this.plugin = plugin;
+        this.app = app;
     }
 
     getViewType(): string {

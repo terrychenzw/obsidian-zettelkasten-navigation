@@ -1,14 +1,14 @@
-import ZKNavigationPlugin from "main";
+import ZKNavigationPlugin from "@/main";
 import { App, FuzzySuggestModal, Notice, SuggestModal, renderMatches } from "obsidian";
-import { t } from "src/lang/helper";
-import { ZKNode } from "src/view/indexView";
+import { t } from "@/src//lang/helper";
+import { ZKNode } from "@/src//view/indexView";
 
 export class mainNoteModal extends SuggestModal<ZKNode>{
-    selectZKNode: ZKNode
+    selectZKNode: ZKNode;
     onSubmit: (selectZKNode: ZKNode) => void;
     plugin: ZKNavigationPlugin;
     MainNotes: ZKNode[];
-    query: string;
+    query: string = '';
   
     constructor(app: App, plugin: ZKNavigationPlugin, MainNotes: ZKNode[], onSubmit: (selectZKNode: ZKNode) => void) {
       super(app);
@@ -17,6 +17,7 @@ export class mainNoteModal extends SuggestModal<ZKNode>{
       this.MainNotes = MainNotes;
       this.setPlaceholder(t("select a main note"));
       this.limit = plugin.settings.maxLenMainModel;
+      this.selectZKNode = onSubmit.arguments[0];
     }
 
     getSuggestions(query: string):ZKNode[] {
@@ -64,6 +65,7 @@ export class mainNoteFuzzyModal extends FuzzySuggestModal<ZKNode> {
       this.MainNotes = MainNotes;
       this.setPlaceholder(t("select a main note"));
       this.limit = plugin.settings.maxLenMainModel;
+      this.selectZKNode = onsubmit?.arguments[0];
     }
   
     getItems(): ZKNode[] {

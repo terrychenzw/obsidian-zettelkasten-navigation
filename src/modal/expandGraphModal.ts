@@ -1,6 +1,6 @@
-import ZKNavigationPlugin from "main";
+import ZKNavigationPlugin from "@/main";
 import { App, Modal, Notice, TFile, loadMermaid } from "obsidian";
-import { ZKNode, ZK_NAVIGATION } from "src/view/indexView";
+import { ZKNode, ZK_NAVIGATION } from "@/src//view/indexView";
 
 export class expandGraphModal extends Modal {
 
@@ -37,6 +37,7 @@ export class expandGraphModal extends Modal {
     this.contentEl.appendChild(svgGraph);
 
     const svgPanZoom = require("svg-pan-zoom");
+ 
     let panZoomTiger = svgPanZoom(`#zk-expand-graph-svg`, {
         zoomEnabled: true,
         controlIconsEnabled: false,
@@ -79,11 +80,14 @@ export class expandGraphModal extends Modal {
             link.textContent = nodeArr[i].getText();
             nodeArr[i].textContent = "";
             nodeArr[i].appendChild(link);
-            nodeGArr[i].addEventListener("click", (event: MouseEvent) => {
+            
+            const element = nodeGArr[i] as HTMLElement;
+
+            element.addEventListener("click", (event: MouseEvent) => {
                 this.app.workspace.openLinkText("", path, 'tab');                
             })
 
-            nodeArr[i].addEventListener(`mouseover`, (event: MouseEvent) => {
+            element.addEventListener(`mouseover`, (event: MouseEvent) => {
                 this.app.workspace.trigger(`hover-link`, {
                     event,
                     source: ZK_NAVIGATION,
@@ -111,11 +115,12 @@ export class expandGraphModal extends Modal {
             
             if(nodeArr.length > 0){
                 let node = nodeArr[0];
-                circleNodes[j].addEventListener("click", async (event: MouseEvent) => {  
+                const element = circleNodes[j] as HTMLElement;
+                element.addEventListener("click", async (event: MouseEvent) => {  
                     this.app.workspace.openLinkText("", node.file.path, 'tab');                   
                 })
                 
-                circleNodes[j].addEventListener(`mouseover`, (event: MouseEvent) => {
+                element.addEventListener(`mouseover`, (event: MouseEvent) => {
                     this.app.workspace.trigger(`hover-link`, {
                         event,
                         source: ZK_NAVIGATION,
