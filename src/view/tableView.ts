@@ -1,6 +1,7 @@
 import ZKNavigationPlugin from "@/main";
-import { App, debounce, ItemView, MarkdownRenderer, moment, TFile, WorkspaceLeaf } from "obsidian";
+import { App, debounce, ItemView, MarkdownRenderer, TFile, WorkspaceLeaf } from "obsidian";
 import { ZKNode, ZK_NAVIGATION } from "./indexView";
+import moment from 'moment';
 
 import{ t } from '@/src/lang/helper';
 

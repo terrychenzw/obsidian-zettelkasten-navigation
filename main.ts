@@ -1,4 +1,4 @@
-import { FileView, moment, Notice, Plugin, TFile} from "obsidian";
+import { FileView, Notice, Plugin, TFile} from "obsidian";
 import { t } from "@/src/lang/helper";
 import { indexFuzzyModal, indexModal } from "@/src/modal/indexModal";
 import { mainNoteFuzzyModal, mainNoteModal } from "@/src/modal/mainNoteModal";
@@ -9,6 +9,7 @@ import { ZKIndexView, ZKNode, ZK_INDEX_TYPE, ZK_NAVIGATION } from "@/src/view/in
 import { ZK_OUTLINE_TYPE, ZKOutlineView } from "@/src/view/outlineView";
 import { ZK_RECENT_TYPE, ZKRecentView } from "@/src/view/recentView";
 import { ZK_TABLE_TYPE, ZKTableView } from "@/src/view/tableView";
+import moment from 'moment';
 
 export interface FoldNode{
     graphID: string;

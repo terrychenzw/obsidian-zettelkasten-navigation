@@ -1,6 +1,7 @@
 import ZKNavigationPlugin, { ZoomPanScale } from "@/main";
-import { App, loadMermaid, moment, Notice, TFile } from "obsidian";
+import { App, loadMermaid, Notice, TFile } from "obsidian";
 import { ZKNode } from "@/src/view/indexView";
+import moment from 'moment';
 
 // formatting Luhmann style IDs
 export async function ID_formatting(id: string, arr: string[], siblingsOrder:string): Promise<string[]> {

@@ -1,10 +1,10 @@
 import ZKNavigationPlugin, { FoldNode, Retrival } from "@/main";
-import { App, ButtonComponent, DropdownComponent, ExtraButtonComponent, HeadingCache, ItemView, Menu, Notice, TFile, WorkspaceLeaf, debounce, moment, setTooltip } from "obsidian";
+import { App, ButtonComponent, DropdownComponent, ExtraButtonComponent, HeadingCache, ItemView, Menu, Notice, TFile, WorkspaceLeaf, debounce, setTooltip } from "obsidian";
 import { t } from "@/src/lang/helper";
 import { indexFuzzyModal, indexModal } from "@/src/modal/indexModal";
 import { mainNoteFuzzyModal, mainNoteModal } from "@/src/modal/mainNoteModal";
-import { tableModal } from "@/src/modal/tableModal";
 import { addSvgPanZoom, displayWidth, mainNoteInit, random } from "@/src/utils/utils";
+import moment from 'moment';
 
 export const ZK_INDEX_TYPE: string = "zk-index-type";
 export const ZK_INDEX_VIEW: string = t("zk-index-graph");
