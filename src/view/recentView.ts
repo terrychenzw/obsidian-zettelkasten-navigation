@@ -1,7 +1,8 @@
 import ZKNavigationPlugin from "@/main";
-import { App, debounce,  ExtraButtonComponent,  IconName, ItemView, moment, Notice, WorkspaceLeaf } from "obsidian"
+import { App, debounce,  ExtraButtonComponent,  IconName, ItemView, Notice, WorkspaceLeaf } from "obsidian"
 import { t } from "@/src/lang/helper"
 import { ZK_NAVIGATION } from "./indexView";
+import moment from 'moment';
 
 export const ZK_RECENT_TYPE: string = "zk-recent-type"
 export const ZK_RECENT_VIEW: string = t("History List")
